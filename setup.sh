@@ -15,11 +15,13 @@ jar -cvf Example.jar *
 #for executing hadoop 
 #make sure to remove ~/grep_example rm -R ~/grep_example/
 /usr/local/hduser/bin/hadoop jar Example.jar Twitter aa.csv ~/twitter
-
+/usr/local/hduser/bin/hadoop jar Example.jar Twitter bb.csv ~/twitter1
+/usr/local/hduser/bin/hadoop jar Example.jar Boston cc.csv ~/twitter2
 
 
 echo "\n\n\n---------------------------------------------------------------TWEETS------------------------------------------------------------------------------------"
-
-cat ~/twitter/part-r-00000 | sort -n -k2 -r | head -n5
-
+echo "Events\t\tGeo\t#Tweets\tHashtag"
+awk '{print $1"\t"$2"\t"$3"\t#"$1}' ~/twitter/part-r-00000 | sort -n -k2 -r | head -n5
+awk '{print $1"\t"$2"\t"$3"\t#"$1}' ~/twitter1/part-r-00000 | sort -n -k2 -r | head -n5
+awk '{print $1"BOMBBLAST\t"$1"\t"$2"\t#"$1}' ~/twitter2/part-r-00000 | sort -n -k2 -r | head -n5
 

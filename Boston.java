@@ -9,7 +9,7 @@ import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
-   public class Twitter {
+   public class Boston {
 
     public static class Map extends Mapper<LongWritable, Text, Text,
 IntWritable> {
@@ -21,13 +21,10 @@ throws IOException, InterruptedException {
            String line = value.toString();
            String str[]=line.split(",");
 	   String hashtag=str[str.length-2];
-	   if(hashtag.charAt(0)=='#')
-		hashtag=hashtag.substring(1);
-	   hashtag=hashtag.toUpperCase()+"\t"+str[str.length-1].toUpperCase();
-	   if(!(hashtag.toLowerCase().contains("none") || hashtag.toLowerCase().contains("label") || hashtag.toLowerCase().contains(" ")))
+	   if(hashtag.toLowerCase().contains("boston") && str[str.length-1].toLowerCase().contains("on-topic"))
 	   {
-	   category.set(hashtag);
-      	   context.write(category, one);
+	   	category.set("BOSTON");
+      	   	context.write(category, one);
            }
       }
 
@@ -53,7 +50,7 @@ Context context)
 
            @SuppressWarnings("deprecation")
                 Job job = new Job(conf, "categories");
-           job.setJarByClass(Twitter.class);
+           job.setJarByClass(Boston.class);
 
            job.setMapOutputKeyClass(Text.class);
            job.setMapOutputValueClass(IntWritable.class);
